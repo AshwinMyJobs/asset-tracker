@@ -1,15 +1,50 @@
 services:
   postgres-db:
-    image: postgres:16-alpine
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM postgres:16-alpine
+        RUN echo "host replication postgres 172.25.0.0/16 trust" >> /usr/local/share/postgresql/pg_hba.conf.sample
     container_name: asset-postgres
     environment:
       POSTGRES_DB: asset_management
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: SecretPassword123
+    command: postgres -c wal_level=replica -c max_wal_senders=10 -c max_replication_slots=10 -c hot_standby=on
     ports:
       - "5433:5432"
     networks:
-      - asset-network
+      asset-network:
+        ipv4_address: 172.25.0.10
+
+  postgres-replica:
+    image: postgres:16-alpine
+    container_name: asset-postgres-replica
+    environment:
+      POSTGRES_PASSWORD: SecretPassword123
+    ports:
+      - "5435:5432" 
+    depends_on:
+      - postgres-db
+    networks:
+      asset-network:
+        ipv4_address: 172.25.0.20
+    entrypoint: |
+      /bin/sh -c "
+      if [ ! -s /var/lib/postgresql/data/PG_VERSION ]; then
+        echo '🔄 Wiping clean and cloning master data...'
+        rm -rf /var/lib/postgresql/data/*
+        until pg_basebackup -h 172.25.0.10 -p 5432 -D /var/lib/postgresql/data -U postgres -v -P -R -X stream; do
+          echo '⏳ Waiting for master database to come online...'
+          sleep 2
+        done
+        echo '✅ Clone complete. Repairing file permissions...'
+        chown -R postgres:postgres /var/lib/postgresql/data
+        # 👈 FIXED: Restricts data directory rights strictly to user-only access as required by Postgres
+        chmod 700 /var/lib/postgresql/data
+      fi
+      exec su-exec postgres postgres
+      "
 
   mongo-db:
     image: mongo:7.0
@@ -21,7 +56,8 @@ services:
     ports:
       - "27018:27017"
     networks:
-      - asset-network
+      asset-network:
+        ipv4_address: 172.25.0.30
 
   keycloak-db:
     image: postgres:15-alpine
@@ -33,7 +69,8 @@ services:
     ports:
       - "5434:5432"
     networks:
-      - asset-network
+      asset-network:
+        ipv4_address: 172.25.0.40
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0
@@ -41,7 +78,7 @@ services:
     command: start-dev
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_URL: jdbc:postgresql://172.25.0.40:5432/keycloak
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: password
       KEYCLOAK_ADMIN: admin
@@ -51,9 +88,12 @@ services:
     depends_on:
       - keycloak-db
     networks:
-      - asset-network
+      asset-network:
+        ipv4_address: 172.25.0.50
 
 networks:
   asset-network:
     driver: bridge
-
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16

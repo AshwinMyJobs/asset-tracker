@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import keycloak from './keycloak'; // 1. Pull the active identity session reference
+import keycloak from './keycloak'; // Pull the active identity session reference
 
 interface Asset {
   id: number;
@@ -14,41 +14,56 @@ function App() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false); // 👈 Dynamic role state
 
   const [formName, setFormName] = useState<string>('');
   const [formType, setFormType] = useState<string>('');
   const [formOwner, setFormOwner] = useState<string>('');
   const [formStatus, setFormStatus] = useState<'Active' | 'Maintenance' | 'Decommissioned'>('Active');
 
-  // 2. SECURED READ OPERATION: Converted to async to await token validation
-  useEffect(() => {
-    const fetchSecureAssets = async () => {
-      try {
-        // Ensure token is fresh for the request
-        await keycloak.updateToken(30);
+  // SECURED READ OPERATION & ROLE EXTRACTION
+useEffect(() => {
+  const fetchSecureAssets = async () => {
+    try {
+      console.log("🔄 Step 1: Initiating token update validation...");
+      await keycloak.updateToken(30);
+      console.log("✅ Step 2: Token is fresh. Raw JWT payload:", keycloak.tokenParsed);
 
-        const res = await fetch('http://localhost:8080/api/assets', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${keycloak.token}`, // Inject JWT Access Token
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (!res.ok) throw new Error(`Server error: ${res.status}`);
-        const data = await res.json();
-        setAssets(data);
-        setLoading(false);
-      } catch (err: any) {
-        setError(err.message);
-        setLoading(false);
+      // Bulletproof local check for the ASSET_ADMIN role
+      const realmRoles: string[] = (keycloak.tokenParsed as any)?.realm_access?.roles || [];
+      if (keycloak.hasRealmRole('ASSET_ADMIN') || realmRoles.includes('ASSET_ADMIN')) {
+        console.log("👑 Role match: ASSET_ADMIN found.");
+        setIsAdmin(true);
       }
-    };
 
-    fetchSecureAssets();
-  }, []);
+      console.log("📡 Step 3: Dispatching fetch request to Spring Boot...");
+      const res = await fetch('http://localhost:8080/api/assets', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${keycloak.token}`,
+          'Content-Type': 'application/json'
+        }
+      });
 
-  // 3. SECURED MUTATION WRITE OPERATION
+      console.log("📩 Step 4: Server responded with status code:", res.status);
+      if (!res.ok) throw new Error(`Server returned error status: ${res.status}`);
+      
+      const data = await res.json();
+      setAssets(data);
+      setLoading(false);
+    } catch (err: any) {
+      // 👈 THIS WILL PRINT THE EXACT ROOT CAUSE CRASH POINT
+      console.error("💥 SYSTEM CRASH IN FETCH FLOW:", err);
+      setError(`Connection failure: ${err.message}`);
+      setLoading(false);
+    }
+  };
+
+  fetchSecureAssets();
+}, []);
+
+
+  // SECURED MUTATION WRITE OPERATION
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -90,47 +105,64 @@ function App() {
 
   return (
     <div style={{ padding: '24px', fontFamily: 'Arial, sans-serif' }}>
-      <header style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h1>🏢 Enterprise Asset & Compliance Tracker</h1>
-          <p>Senior IC Technical Playground Workspace</p>
+      <header style={{
+        marginBottom: '24px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap', // Prevents crushing items on narrower screens
+        gap: '16px'
+      }}>
+        <div style={{ flex: '1', minWidth: '300px' }}> {/* Wraps title content safely */}
+          <h1 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '12px', fontSize: '2rem', lineHeight: '1.2' }}>
+            🏢 Enterprise Asset & Compliance Tracker
+          </h1>
+          <p style={{ margin: '4px 0 0 0', color: '#6c757d' }}>Senior IC Technical Playground Workspace</p>
         </div>
-        {/* Added a handy secure logout button */}
-        <button 
-          onClick={() => keycloak.logout()} 
-          style={{ padding: '8px 16px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+        {/* Logout button container */}
+        <button
+          onClick={() => keycloak.logout()}
+          style={{ padding: '8px 16px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
           🚪 Logout ({keycloak.tokenParsed?.preferred_username})
         </button>
       </header>
 
-      <section style={{ marginBottom: '32px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #dee2e6' }}>
-        <h3 style={{ marginTop: 0 }}>➕ Register New Enterprise Asset</h3>
-        <form onSubmit={handleFormSubmit} style={{ display: 'grid', gap: '12px', maxWidth: '400px' }}>
-          <div>
-            <label style={{ display: 'block', marginBottom: '4px' }}>Asset Name:</label>
-            <input type="text" value={formName} onChange={(e) => setFormName(e.target.value)} required style={{ width: '100%', padding: '6px' }} />
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '4px' }}>Asset Type:</label>
-            <input type="text" value={formType} onChange={(e) => setFormType(e.target.value)} required style={{ width: '100%', padding: '6px' }} />
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '4px' }}>Team Owner:</label>
-            <input type="text" value={formOwner} onChange={(e) => setFormOwner(e.target.value)} required style={{ width: '100%', padding: '6px' }} />
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '4px' }}>Operational Status:</label>
-            <select value={formStatus} onChange={(e) => setFormStatus(e.target.value as any)} style={{ width: '100%', padding: '6px' }}>
-              <option value="Active">Active</option>
-              <option value="Maintenance">Maintenance</option>
-              <option value="Decommissioned">Decommissioned</option>
-            </select>
-          </div>
-          <button type="submit" style={{ padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
-            💾 Save to PostgreSQL via Spring Boot
-          </button>
-        </form>
-      </section>
+
+      {/* CONDITIONAL UX RENDERING BASED ON IDENTITY ROLES */}
+      {isAdmin ? (
+        <section style={{ marginBottom: '32px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #dee2e6' }}>
+          <h3 style={{ marginTop: 0 }}>➕ Register New Enterprise Asset</h3>
+          <form onSubmit={handleFormSubmit} style={{ display: 'grid', gap: '12px', maxWidth: '400px' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '4px' }}>Asset Name:</label>
+              <input type="text" value={formName} onChange={(e) => setFormName(e.target.value)} required style={{ width: '100%', padding: '6px' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '4px' }}>Asset Type:</label>
+              <input type="text" value={formType} onChange={(e) => setFormType(e.target.value)} required style={{ width: '100%', padding: '6px' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '4px' }}>Team Owner:</label>
+              <input type="text" value={formOwner} onChange={(e) => setFormOwner(e.target.value)} required style={{ width: '100%', padding: '6px' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '4px' }}>Operational Status:</label>
+              <select value={formStatus} onChange={(e) => setFormStatus(e.target.value as any)} style={{ width: '100%', padding: '6px' }}>
+                <option value="Active">Active</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Decommissioned">Decommissioned</option>
+              </select>
+            </div>
+            <button type="submit" style={{ padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+              💾 Save to PostgreSQL via Spring Boot
+            </button>
+          </form>
+        </section>
+      ) : (
+        <div style={{ marginBottom: '32px', padding: '16px', backgroundColor: '#e2f0fe', color: '#184c78', borderRadius: '6px', border: '1px solid #b8daff' }}>
+          ℹ️ You are logged in with **Read-Only view privileges**. Asset registration capabilities require administrative authorization.
+        </div>
+      )}
 
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
