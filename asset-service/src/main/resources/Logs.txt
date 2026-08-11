@@ -1,46 +1,351 @@
-"C:\Program Files\Java\jdk-21\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.3.5\lib\idea_rt.jar=55554" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\ashwi\AppData\Local\Temp\classpath368695379.jar com.enterprise.asset_service.AssetServiceApplication
+PS C:\CODE\myjobsash\enterprise-asset-tracker\asset-tracker-ui> docker logs asset-postgres
+2026-08-11 10:14:15,284 - bootstrapping - INFO - Figuring out my environment (Google? AWS? Openstack? Local?)
+2026-08-11 10:14:15,310 - bootstrapping - INFO - Could not connect to 169.254.169.254, assuming local Docker setup
+2026-08-11 10:14:15,312 - bootstrapping - INFO - No meta-data available for this provider
+2026-08-11 10:14:15,312 - bootstrapping - INFO - Looks like you are running local
+2026-08-11 10:14:15,526 - bootstrapping - INFO - Configuring pam-oauth2
+2026-08-11 10:14:15,526 - bootstrapping - INFO - No PAM_OAUTH2 configuration was specified, skipping
+2026-08-11 10:14:15,526 - bootstrapping - INFO - Configuring crontab
+2026-08-11 10:14:15,526 - bootstrapping - INFO - Skipping creation of renice cron job due to lack of SYS_NICE capability
+2026-08-11 10:14:15,526 - bootstrapping - INFO - Configuring wal-e
+2026-08-11 10:14:15,526 - bootstrapping - INFO - Configuring certificate
+2026-08-11 10:14:15,527 - bootstrapping - INFO - Generating ssl self-signed certificate
+2026-08-11 10:14:16,200 - bootstrapping - INFO - Configuring log
+2026-08-11 10:14:16,200 - bootstrapping - INFO - Configuring standby-cluster
+2026-08-11 10:14:16,200 - bootstrapping - INFO - Configuring pgbouncer
+2026-08-11 10:14:16,200 - bootstrapping - INFO - No PGBOUNCER_CONFIGURATION was specified, skipping
+2026-08-11 10:14:16,200 - bootstrapping - INFO - Configuring pgqd
+2026-08-11 10:14:16,201 - bootstrapping - INFO - Configuring patroni
+2026-08-11 10:14:16,209 - bootstrapping - INFO - Writing to file /run/postgres.yml
+2026-08-11 10:14:16,210 - bootstrapping - INFO - Configuring bootstrap
+2026-08-11 10:14:17.324047 W | pkg/flags: unrecognized environment variable ETCD_UNSUPPORTED_ARCH=amd64
+2026-08-11 10:14:17.324330 I | etcdmain: etcd Version: 3.3.27
+2026-08-11 10:14:17.324334 I | etcdmain: Git SHA: 973882f69
+2026-08-11 10:14:17.324336 I | etcdmain: Go Version: go1.12.17
+2026-08-11 10:14:17.324338 I | etcdmain: Go OS/Arch: linux/amd64
+2026-08-11 10:14:17.324341 I | etcdmain: setting maximum number of CPUs to 8, total number of available CPUs is 8
+2026-08-11 10:14:17.326455 I | embed: listening for peers on http://localhost:2380
+2026-08-11 10:14:17.326873 I | embed: listening for client requests on localhost:2379
+2026-08-11 10:14:17.334932 I | etcdserver: name = default
+2026-08-11 10:14:17.334969 I | etcdserver: data dir = /run/etcd.data
+2026-08-11 10:14:17.334974 I | etcdserver: member dir = /run/etcd.data/member
+2026-08-11 10:14:17.334977 I | etcdserver: heartbeat = 100ms
+2026-08-11 10:14:17.334980 I | etcdserver: election = 1000ms
+2026-08-11 10:14:17.334982 I | etcdserver: snapshot count = 100000
+2026-08-11 10:14:17.335002 I | etcdserver: advertise client URLs = http://localhost:2379
+2026-08-11 10:14:17.335006 I | etcdserver: initial advertise peer URLs = http://localhost:2380
+2026-08-11 10:14:17.335013 I | etcdserver: initial cluster = default=http://localhost:2380
+2026-08-11 10:14:17.342996 I | etcdserver: starting member 8e9e05c52164694d in cluster cdf818194e3a8c32
+2026-08-11 10:14:17.343221 I | raft: 8e9e05c52164694d became follower at term 0
+2026-08-11 10:14:17.343402 I | raft: newRaft 8e9e05c52164694d [peers: [], term: 0, commit: 0, applied: 0, lastindex: 0, lastterm: 0]
+2026-08-11 10:14:17.343436 I | raft: 8e9e05c52164694d became follower at term 1
+2026-08-11 10:14:17.347865 W | auth: simple token is not cryptographically signed
+2026-08-11 10:14:17.355949 I | etcdserver: starting server... [version: 3.3.27, cluster version: to_be_decided]
+2026-08-11 10:14:17.356449 I | etcdserver: 8e9e05c52164694d as single-node; fast-forwarding 9 ticks (election ticks 10)
+2026-08-11 10:14:17.357951 I | etcdserver/membership: added member 8e9e05c52164694d [http://localhost:2380] to cluster cdf818194e3a8c32
+2026-08-11 10:14:17.544505 I | raft: 8e9e05c52164694d is starting a new election at term 1
+2026-08-11 10:14:17.544567 I | raft: 8e9e05c52164694d became candidate at term 2
+2026-08-11 10:14:17.544627 I | raft: 8e9e05c52164694d received MsgVoteResp from 8e9e05c52164694d at term 2
+2026-08-11 10:14:17.544640 I | raft: 8e9e05c52164694d became leader at term 2
+2026-08-11 10:14:17.544646 I | raft: raft.node: 8e9e05c52164694d elected leader 8e9e05c52164694d at term 2
+2026-08-11 10:14:17.545012 I | etcdserver: setting up the initial cluster version to 3.3
+2026-08-11 10:14:17.547520 N | etcdserver/membership: set the initial cluster version to 3.3
+2026-08-11 10:14:17.547589 I | etcdserver/api: enabled capabilities for version 3.3
+2026-08-11 10:14:17.547611 I | embed: ready to serve client requests
+2026-08-11 10:14:17.547662 I | etcdserver: published {Name:default ClientURLs:[http://localhost:2379]} to cluster cdf818194e3a8c32
+2026-08-11 10:14:17.550374 N | embed: serving insecure client requests on 127.0.0.1:2379, this is strongly discouraged!
+2026-08-11 10:14:17,759 INFO: Selected new etcd server http://localhost:2379
+2026-08-11 10:14:17,765 INFO: No PostgreSQL configuration items changed, nothing to reload.
+2026-08-11 10:14:17,773 INFO: Lock owner: None; I am 386edfa53672
+2026-08-11 10:14:17,778 INFO: trying to bootstrap a new cluster
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
 
-  .   ____          _            __ _ _
- /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
- \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-  '  |____| .__|_| |_|_| |_\__, | / / / /
- =========|_|==============|___/=/_/_/_/
+The database cluster will be initialized with locale "en_US.UTF-8".
+The default text search configuration will be set to "english".
 
- :: Spring Boot ::                (v3.3.2)
+Data page checksums are enabled.
 
-2026-08-11T10:01:25.696+05:30  INFO 11732 --- [asset-service] [           main] c.e.a.AssetServiceApplication            : Starting AssetServiceApplication using Java 21.0.2 with PID 11732 (C:\CODE\myjobsash\enterprise-asset-tracker\asset-service\target\classes started by ashwi in C:\CODE\myjobsash\enterprise-asset-tracker\asset-service)
-2026-08-11T10:01:25.700+05:30  INFO 11732 --- [asset-service] [           main] c.e.a.AssetServiceApplication            : No active profile set, falling back to 1 default profile: "default"
-2026-08-11T10:01:26.753+05:30  INFO 11732 --- [asset-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
-2026-08-11T10:01:26.753+05:30  INFO 11732 --- [asset-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-08-11T10:01:26.801+05:30  INFO 11732 --- [asset-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 39 ms. Found 1 JPA repository interface.
-2026-08-11T10:01:26.803+05:30  INFO 11732 --- [asset-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
-2026-08-11T10:01:26.803+05:30  INFO 11732 --- [asset-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
-2026-08-11T10:01:26.810+05:30  INFO 11732 --- [asset-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 1 MongoDB repository interface.
-2026-08-11T10:01:29.262+05:30  INFO 11732 --- [asset-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2026-08-11T10:01:29.289+05:30  INFO 11732 --- [asset-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-08-11T10:01:29.289+05:30  INFO 11732 --- [asset-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.26]
-2026-08-11T10:01:29.389+05:30  INFO 11732 --- [asset-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-08-11T10:01:29.391+05:30  INFO 11732 --- [asset-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3578 ms
-2026-08-11T10:01:30.177+05:30  INFO 11732 --- [asset-service] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-08-11T10:01:30.328+05:30  INFO 11732 --- [asset-service] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
-2026-08-11T10:01:30.406+05:30  INFO 11732 --- [asset-service] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-08-11T10:01:30.990+05:30  INFO 11732 --- [asset-service] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-08-11T10:01:31.088+05:30  INFO 11732 --- [asset-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-08-11T10:01:31.594+05:30  INFO 11732 --- [asset-service] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1bea7b0
-2026-08-11T10:01:31.597+05:30  INFO 11732 --- [asset-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-08-11T10:01:32.893+05:30  INFO 11732 --- [asset-service] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-08-11T10:01:32.973+05:30  INFO 11732 --- [asset-service] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-08-11T10:01:34.267+05:30  INFO 11732 --- [asset-service] [           main] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.0.1"}, "os": {"type": "Windows", "name": "Windows 11", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/21.0.2+13-LTS-58"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=majority, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='root_admin', source='admin', password=<hidden>, mechanismProperties=<hidden>}, transportSettings=null, commandListeners=[io.micrometer.core.instrument.binder.mongodb.MongoMetricsCommandListener@27244a88], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@7692c0e9, com.mongodb.Jep395RecordCodecProvider@431f8830, com.mongodb.KotlinCodecProvider@75bbe39d]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27018], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='5000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=5000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=5000, readTimeoutMS=5000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[io.micrometer.core.instrument.binder.mongodb.MongoMetricsConnectionPoolListener@25031fd4], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null}
-2026-08-11T10:01:34.339+05:30  INFO 11732 --- [asset-service] [localhost:27018] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27018, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=51275100}
-2026-08-11T10:01:35.218+05:30  WARN 11732 --- [asset-service] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-08-11T10:01:35.295+05:30 DEBUG 11732 --- [asset-service] [           main] swordEncoderAuthenticationManagerBuilder : No authenticationProviders and no parentAuthenticationManager defined. Returning null.
-2026-08-11T10:01:36.332+05:30  INFO 11732 --- [asset-service] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2026-08-11T10:01:36.578+05:30 DEBUG 11732 --- [asset-service] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, BearerTokenAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-08-11T10:01:37.529+05:30  INFO 11732 --- [asset-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
-2026-08-11T10:01:37.552+05:30  INFO 11732 --- [asset-service] [           main] c.e.a.AssetServiceApplication            : Started AssetServiceApplication in 12.492 seconds (process running for 13.2)
-Hibernate:
-    select
-        count(*)
-    from
-        assets a1_0
+fixing permissions on existing directory /home/postgres/pgdata/pgroot/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Etc/UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+
+Success. You can now start the database server using:
+
+    /usr/lib/postgresql/16/bin/pg_ctl -D /home/postgres/pgdata/pgroot/data -l logfile start
+
+2026-08-11 10:14:21,824 INFO: postmaster pid=87
+/var/run/postgresql:5432 - no response
+2026-08-11 10:14:21 UTC [87]: [1-1] 6a7af5fd.57 0     LOG:  Auto detecting pg_stat_kcache.linux_hz parameter...
+2026-08-11 10:14:21 UTC [87]: [2-1] 6a7af5fd.57 0     LOG:  pg_stat_kcache.linux_hz is set to 1000000
+/var/run/postgresql:5432 - no response
+2026-08-11 10:14:23 UTC [87]: [3-1] 6a7af5fd.57 0     LOG:  redirecting log output to logging collector process
+2026-08-11 10:14:23 UTC [87]: [4-1] 6a7af5fd.57 0     HINT:  Future log output will appear in directory "../pg_log".
+/var/run/postgresql:5432 - accepting connections
+/var/run/postgresql:5432 - accepting connections
+2026-08-11 10:14:23,891 INFO: establishing a new patroni heartbeat connection to postgres
+2026-08-11 10:14:23,917 INFO: running post_bootstrap
+DO
+GRANT ROLE
+DO
+DO
+CREATE EXTENSION
+NOTICE:  version "1.1" of extension "pg_auth_mon" is already installed
+ALTER EXTENSION
+GRANT
+CREATE EXTENSION
+DO
+NOTICE:  version "1.6" of extension "pg_cron" is already installed
+ALTER EXTENSION
+ALTER POLICY
+REVOKE
+GRANT
+REVOKE
+GRANT
+ALTER POLICY
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+REVOKE
+GRANT
+CREATE EXTENSION
+DO
+CREATE TABLE
+GRANT
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+DO
+CREATE FOREIGN TABLE
+GRANT
+CREATE VIEW
+ALTER VIEW
+GRANT
+CREATE FOREIGN TABLE
+GRANT
+CREATE VIEW
+ALTER VIEW
+GRANT
+CREATE FOREIGN TABLE
+GRANT
+CREATE VIEW
+ALTER VIEW
+GRANT
+CREATE FOREIGN TABLE
+GRANT
+CREATE VIEW
+ALTER VIEW
+GRANT
+CREATE FOREIGN TABLE
+GRANT
+CREATE VIEW
+ALTER VIEW
+GRANT
+CREATE FOREIGN TABLE
+GRANT
+CREATE VIEW
+ALTER VIEW
+GRANT
+CREATE FOREIGN TABLE
+GRANT
+CREATE VIEW
+ALTER VIEW
+GRANT
+CREATE FOREIGN TABLE
+GRANT
+CREATE VIEW
+ALTER VIEW
+GRANT
+RESET
+SET
+NOTICE:  schema "zmon_utils" does not exist, skipping
+DROP SCHEMA
+DO
+NOTICE:  language "plpythonu" does not exist, skipping
+DROP LANGUAGE
+NOTICE:  function plpython_call_handler() does not exist, skipping
+DROP FUNCTION
+NOTICE:  function plpython_inline_handler(internal) does not exist, skipping
+DROP FUNCTION
+NOTICE:  function plpython_validator(oid) does not exist, skipping
+DROP FUNCTION
+CREATE SCHEMA
+GRANT
+SET
+CREATE TYPE
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+CREATE VIEW
+REVOKE
+GRANT
+CREATE FUNCTION
+CREATE VIEW
+REVOKE
+REVOKE
+GRANT
+GRANT
+You are now connected to database "postgres" as user "postgres".
+CREATE SCHEMA
+GRANT
+SET
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+GRANT
+RESET
+CREATE EXTENSION
+CREATE EXTENSION
+CREATE EXTENSION
+NOTICE:  version "4.0.1" of extension "set_user" is already installed
+ALTER EXTENSION
+GRANT
+GRANT
+GRANT
+CREATE SCHEMA
+GRANT
+SET
+CREATE FUNCTION
+CREATE VIEW
+CREATE FUNCTION
+CREATE VIEW
+CREATE FUNCTION
+CREATE VIEW
+CREATE FUNCTION
+CREATE VIEW
+REVOKE
+GRANT
+REVOKE
+GRANT
+RESET
+You are now connected to database "template1" as user "postgres".
+CREATE SCHEMA
+GRANT
+SET
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+GRANT
+RESET
+CREATE EXTENSION
+CREATE EXTENSION
+CREATE EXTENSION
+NOTICE:  version "4.0.1" of extension "set_user" is already installed
+ALTER EXTENSION
+GRANT
+GRANT
+GRANT
+CREATE SCHEMA
+GRANT
+SET
+CREATE FUNCTION
+CREATE VIEW
+CREATE FUNCTION
+CREATE VIEW
+CREATE FUNCTION
+CREATE VIEW
+CREATE FUNCTION
+CREATE VIEW
+REVOKE
+GRANT
+REVOKE
+GRANT
+RESET
+2026-08-11 10:14:24,833 WARNING: Could not activate Linux watchdog device: Can't open watchdog device: [Errno 2] No such file or directory: '/dev/watchdog'
+2026-08-11 10:14:24,848 INFO: initialized a new cluster
+2026-08-11 10:14:34,848 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:14:44,843 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:14:54,854 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:15:04,847 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:15:14,841 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:15:17,318 INFO: establishing a new patroni restapi connection to postgres
+2026-08-11 10:15:17.351 UTC [34] LOG Starting pgqd 3.5
+2026-08-11 10:15:17.352 UTC [34] LOG auto-detecting dbs ...
+2026-08-11 10:15:24,840 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:15:34,847 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:15:44,841 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:15:47.358 UTC [34] LOG {ticks: 0, maint: 0, retry: 0}
+2026-08-11 10:15:54,840 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:16:04,842 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:16:14,840 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:16:17.367 UTC [34] LOG {ticks: 0, maint: 0, retry: 0}
+2026-08-11 10:16:24,840 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:16:34,838 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:16:44,841 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:16:47.387 UTC [34] LOG {ticks: 0, maint: 0, retry: 0}
+2026-08-11 10:16:54,872 INFO: no action. I am (386edfa53672), the leader with the lock
+2026-08-11 10:17:04,844 INFO: no action. I am (386edfa53672), the leader with the lock
+PS C:\CODE\myjobsash\enterprise-asset-tracker\asset-tracker-ui>

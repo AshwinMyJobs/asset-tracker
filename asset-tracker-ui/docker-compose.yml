@@ -1,50 +1,35 @@
 services:
   postgres-db:
-    build:
-      context: .
-      dockerfile_inline: |
-        FROM postgres:16-alpine
-        RUN echo "host replication postgres 172.25.0.0/16 trust" >> /usr/local/share/postgresql/pg_hba.conf.sample
+    # 💡 UPDATED: Swapped to a verified, active Spilo 16 registry image tag
+    image: ghcr.io/zalando/spilo-16:3.3-p3
     container_name: asset-postgres
-    environment:
-      POSTGRES_DB: asset_management
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: SecretPassword123
-    command: postgres -c wal_level=replica -c max_wal_senders=10 -c max_replication_slots=10 -c hot_standby=on
     ports:
       - "5433:5432"
+    environment:
+      # 1. Cluster Information
+      PATRONI_SCOPE: asset_management_cluster
+      PATRONI_NAME: postgres-primary
+      
+      # 2. Consul DCS Configuration
+      PATRONI_DCS_PROVIDER: consul
+      PATRONI_CONSUL_HOST: consul_registry:8500
+      
+      # 3. Network and Security Settings
+      PATRONI_POSTGRESQL_LISTEN: '0.0.0.0:5432'
+      PATRONI_POSTGRESQL_DATA_DIR: '/home/postgres/pgdata'
+      PATRONI_SUPERUSER_USERNAME: postgres
+      PATRONI_SUPERUSER_PASSWORD: SecretPassword123
+      
+      # Bootstrap configuration parameters
+      PATRONI_BOOTSTRAP_DCS: |
+        ttl: 30
+        loop_wait: 10
+        retry_timeout: 10
     networks:
       asset-network:
         ipv4_address: 172.25.0.10
-
-  postgres-replica:
-    image: postgres:16-alpine
-    container_name: asset-postgres-replica
-    environment:
-      POSTGRES_PASSWORD: SecretPassword123
-    ports:
-      - "5435:5432" 
     depends_on:
-      - postgres-db
-    networks:
-      asset-network:
-        ipv4_address: 172.25.0.20
-    entrypoint: |
-      /bin/sh -c "
-      if [ ! -s /var/lib/postgresql/data/PG_VERSION ]; then
-        echo '🔄 Wiping clean and cloning master data...'
-        rm -rf /var/lib/postgresql/data/*
-        until pg_basebackup -h 172.25.0.10 -p 5432 -D /var/lib/postgresql/data -U postgres -v -P -R -X stream; do
-          echo '⏳ Waiting for master database to come online...'
-          sleep 2
-        done
-        echo '✅ Clone complete. Repairing file permissions...'
-        chown -R postgres:postgres /var/lib/postgresql/data
-        # 👈 FIXED: Restricts data directory rights strictly to user-only access as required by Postgres
-        chmod 700 /var/lib/postgresql/data
-      fi
-      exec su-exec postgres postgres
-      "
+      - consul
 
   mongo-db:
     image: mongo:7.0
@@ -90,7 +75,7 @@ services:
     networks:
       asset-network:
         ipv4_address: 172.25.0.50
-        
+
   consul:
     image: hashicorp/consul:1.15.4
     container_name: consul_registry
