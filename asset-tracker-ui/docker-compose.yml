@@ -1,35 +1,18 @@
 services:
   postgres-db:
-    # 💡 UPDATED: Swapped to a verified, active Spilo 16 registry image tag
-    image: ghcr.io/zalando/spilo-16:3.3-p3
+    image: postgres:16-alpine
     container_name: asset-postgres
     ports:
       - "5433:5432"
     environment:
-      # 1. Cluster Information
-      PATRONI_SCOPE: asset_management_cluster
-      PATRONI_NAME: postgres-primary
-      
-      # 2. Consul DCS Configuration
-      PATRONI_DCS_PROVIDER: consul
-      PATRONI_CONSUL_HOST: consul_registry:8500
-      
-      # 3. Network and Security Settings
-      PATRONI_POSTGRESQL_LISTEN: '0.0.0.0:5432'
-      PATRONI_POSTGRESQL_DATA_DIR: '/home/postgres/pgdata'
-      PATRONI_SUPERUSER_USERNAME: postgres
-      PATRONI_SUPERUSER_PASSWORD: SecretPassword123
-      
-      # Bootstrap configuration parameters
-      PATRONI_BOOTSTRAP_DCS: |
-        ttl: 30
-        loop_wait: 10
-        retry_timeout: 10
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: SecretPassword123
+      POSTGRES_DB: asset_management
     networks:
       asset-network:
         ipv4_address: 172.25.0.10
-    depends_on:
-      - consul
+
+
 
   mongo-db:
     image: mongo:7.0
@@ -84,7 +67,8 @@ services:
       - "8600:8600/udp"
     command: "agent -dev -client=0.0.0.0"
     networks:
-      - asset-network # Ensure this matches your existing static network name
+      asset-network:
+        ipv4_address: 172.25.0.60 # 💡 Pins Consul to your expected static IP layout
 
 networks:
   asset-network:
@@ -92,3 +76,6 @@ networks:
     ipam:
       config:
         - subnet: 172.25.0.0/16
+
+volumes:
+  pgdata_master:
